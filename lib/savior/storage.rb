@@ -1,4 +1,4 @@
-module Savior
+class Savior
   class Storage
     def initialize(options={})
       default_options = {
@@ -14,10 +14,10 @@ module Savior
       )
     end
 
-    def upload_file
+    def upload_file(db_snapshot_file)
       s3_snapshot_object = @s3.bucket[@options[:backups_bucket]].
-        objects[@options[:db_snapshot_file]]
-      s3_snapshot_object.write(File.read(@options[:db_snapshot_file]))
+        objects[db_snapshot_file]
+      s3_snapshot_object.write(File.read(db_snapshot_file))
     end
 
     # keep:

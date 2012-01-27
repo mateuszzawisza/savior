@@ -1,19 +1,25 @@
-module Savior
+class Savior
   class Database
     def initialize(options = {})
       default_options = {
+        :user => nil,
+        :password => nil,
         :host => "localhost",
-        :port => "3306"
+        :port => "3306",
+        :database_name => nil,
       }
       @credentials = default_options.merge(options)
     end
 
     def create_snapshot
       IO.popen("mysqldump","r+") do |pipe|
-        pipe.puts "#{mysql_command_line_options} > #{db_snapshot_file}"
+        #pipe.puts "#{mysql_command_line_options} > #{db_snapshot_file}"
+        pipe.puts "#{mysql_command_line_options}"
         pipe.close_write
         pipe.gets
       end
+      #system("mysqldump #{mysql_command_line_options} > #{db_snapshot_file}")
+      db_snapshot_file
     end
 
     def cleanup_temporary_files
@@ -24,9 +30,10 @@ module Savior
         cli_options = []
         cli_options << "-u #{@credentials[:user]}"
         cli_options << "-h #{@credentials[:host]}"
-        cli_options << "-p#{@credentials[:password]}"
+        cli_options << "-p#{@credentials[:password]}" if @credentials[:password]
         cli_options << "-P #{@credentials[:port]}"
         cli_options << "#{@credentials[:database_name]}"
+        cli_options << "--single-transaction"
         cli_options.join(" ")
       end
 

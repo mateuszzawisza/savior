@@ -81,7 +81,7 @@ describe Savior::Database do
 
     let :mysql_options do
       "-u #{credentials[:user]} -h #{credentials[:host]} -p#{credentials[:password]} " +
-        "-P #{credentials[:port]} #{credentials[:database_name]} > #{db_snapshot_file}"
+        "-P #{credentials[:port]} #{credentials[:database_name]} --single-transaction"
     end
 
     let(:popen_mock) { double("popen") }
