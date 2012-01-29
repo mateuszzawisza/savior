@@ -62,6 +62,7 @@ describe Savior::Storage do
   describe "#upload_file" do
     let(:bucket_mock) { double("bucket_mock", :[] => objects_mock) }
     let(:objects_mock) { double("objects_mock").as_null_object }
+    let(:file) { double("file").as_null_object }
 
     before(:each) do
       s3.stub(:bucket).and_return(bucket_mock)
@@ -70,7 +71,7 @@ describe Savior::Storage do
 
     it "invokes aws::s3#write method" do
       s3.should_receive(:bucket)
-      subject.upload_file
+      subject.upload_file(file)
     end
   end
 

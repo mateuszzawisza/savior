@@ -14,8 +14,8 @@ class Savior
 
   def save
     check_configuration
-    @db.create_snapshot
-    @storage.upload_file
+    db_snapshot_file = @db.create_snapshot
+    @storage.upload_file(db_snapshot_file)
     @storage.cleanup_old_snapshots
     @db.cleanup_temporary_files
   end

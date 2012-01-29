@@ -12,13 +12,12 @@ class Savior
     end
 
     def create_snapshot
+      db_snapshot_file = set_db_snapshot_file_name
       IO.popen("mysqldump","r+") do |pipe|
-        #pipe.puts "#{mysql_command_line_options} > #{db_snapshot_file}"
         pipe.puts "#{mysql_command_line_options}"
         pipe.close_write
         pipe.gets
       end
-      #system("mysqldump #{mysql_command_line_options} > #{db_snapshot_file}")
       db_snapshot_file
     end
 
@@ -37,9 +36,9 @@ class Savior
         cli_options.join(" ")
       end
 
-      def db_snapshot_file
+      def set_db_snapshot_file_name
         "#{@credentials[:database_name]}_" +
-        "snapshot_#{Time.now.strftime("%Y%m%d%H%M%S")}.sql"
+          "snapshot_#{Time.now.strftime("%Y%m%d%H%M%S")}.sql"
       end
     #EOF private
   end
