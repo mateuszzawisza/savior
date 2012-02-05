@@ -18,15 +18,15 @@ class Savior
 
     def create_snapshot
       db_snapshot_file = set_db_snapshot_file_name
-      IO.popen("mysqldump","r+") do |pipe|
-        pipe.puts "#{mysql_command_line_options}"
+      file = File.open(db_snapshot_file, "w+")
+      IO.popen("mysqldump #{mysql_command_line_options}","r+") do |pipe|
         pipe.close_write
-        pipe.gets
+        while (line = pipe.gets)
+          file.puts line
+        end
       end
+      file.close
       db_snapshot_file
-    end
-
-    def cleanup_temporary_files
     end
 
     private

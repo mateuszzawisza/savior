@@ -84,6 +84,11 @@ describe Savior::Database do
     end
 
     let(:popen_mock) { double("popen") }
+    
+    # cleanup snapshot file
+    after(:all) do
+      File.delete(db_snapshot_file) if File.exist?(db_snapshot_file)
+    end
 
     before(:each) do
       IO.stub(:popen).and_yield(popen_mock)
@@ -93,23 +98,17 @@ describe Savior::Database do
     end
 
     it "invokes IO.popen" do
-      IO.should_receive(:popen).with("mysqldump","r+")
+      IO.should_receive(:popen).with("mysqldump #{mysql_options}","r+")
       subject.create_snapshot
     end
 
     it "invokes IO.popen block" do
-      popen_mock.should_receive(:puts).with(mysql_options)
+      popen_mock.should_receive(:gets)
       subject.create_snapshot
     end
 
-
     it "creates database snapshot file" do
-      pending("should this be tested?")
       File.exist?(db_snapshot_file).should be_true
     end
-  end
-
-  describe "cleanup_temporary_files" do
-    it "removes temporary snapshot files"
   end
 end

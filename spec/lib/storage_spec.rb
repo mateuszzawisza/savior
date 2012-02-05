@@ -74,12 +74,4 @@ describe Savior::Storage do
       subject.upload_file(file)
     end
   end
-
-  describe "#cleanup_old_snapshots" do
-    it "invokes aws::s3#remove method"
-    it "removes no more then 24 last hourly snapshots"
-    it "removes no more then 7 last daily snapshots"
-    it "removes no more then 4 last weekly snapshots"
-    it "does not remove monthly snapshots"
-  end
 end

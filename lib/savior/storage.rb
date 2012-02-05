@@ -19,13 +19,5 @@ class Savior
         objects[db_snapshot_file]
       s3_snapshot_object.write(File.read(db_snapshot_file))
     end
-
-    # keep:
-    #  - 24 hourly
-    #  - 7 daily
-    #  - 4 weekly
-    #  - infinite monthly
-    def cleanup_old_snapshots
-    end
   end
 end
