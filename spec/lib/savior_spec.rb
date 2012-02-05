@@ -75,16 +75,6 @@ describe Savior do
         storage_mock.should_receive(:upload_file)
         subject.save
       end
-
-      it "invokes Savior::Storage#cleanup_old_snapshots" do
-        storage_mock.should_receive(:cleanup_old_snapshots)
-        subject.save
-      end
-
-      it "invokes Savior::Database#cleanup_temporary_files" do
-        database_mock.should_receive(:cleanup_temporary_files)
-        subject.save
-      end
     end
   end
 end

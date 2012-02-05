@@ -1,5 +1,5 @@
-load  "lib/savior/database.rb"
-load  "lib/savior/storage.rb"
+require File.join(File.dirname(__FILE__), "savior/database.rb")
+require File.join(File.dirname(__FILE__), "savior/storage.rb")
 
 class Savior
   # load db configuration
@@ -16,8 +16,6 @@ class Savior
     check_configuration
     db_snapshot_file = @db.create_snapshot
     @storage.upload_file(db_snapshot_file)
-    @storage.cleanup_old_snapshots
-    @db.cleanup_temporary_files
   end
 
   private

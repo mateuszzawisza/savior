@@ -8,7 +8,7 @@ describe Savior::Storage do
 
   subject do
     Savior::Storage.new(
-      :backups_bucket => "production-snapshots",
+      :bucket_name=> "production-snapshots",
       :db_snapshot_file => "production-snapshot-123123123"
     )
   end
@@ -49,14 +49,9 @@ describe Savior::Storage do
       end
     end
 
-    it "sets backups_bucket option" do
-      options[:backups_bucket].should eq("production-snapshots")
+    it "sets bucket_name option" do
+      subject.instance_variable_get("@bucket_name").should eq("production-snapshots")
     end
-
-    it "sets db_snapshot_file option" do
-      options[:db_snapshot_file].should eq("production-snapshot-123123123")
-    end
-
   end
 
   describe "#upload_file" do
@@ -65,12 +60,12 @@ describe Savior::Storage do
     let(:file) { double("file").as_null_object }
 
     before(:each) do
-      s3.stub(:bucket).and_return(bucket_mock)
+      s3.stub(:buckets).and_return(bucket_mock)
       File.stub(:read).and_return("test file")
     end
 
     it "invokes aws::s3#write method" do
-      s3.should_receive(:bucket)
+      s3.should_receive(:buckets)
       subject.upload_file(file)
     end
   end
