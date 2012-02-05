@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+
+lib = File.expand_path(File.dirname(__FILE__) + '/../lib')
+$LOAD_PATH.unshift(lib) if File.directory?(lib) && !$LOAD_PATH.include?(lib)
+
+require "savior"
+require "yaml"
+require "optparse"
+
+options = {}
+OptionParser.new do |opts|
+    opts.banner = "Usage: savior [options]"
+    opts.on("-c PATH", "--config-file=PATH", String, "specify config file") do |path|
+      options[:config_file] = path
+    end
+end.parse!
+
+@config = YAML.load_file(options[:config_file])
+
+if @config
+  savior = Savior.new
+  savior.database(@config[:database])
+  savior.storage(@config[:storage])
+  savior.save
+end
