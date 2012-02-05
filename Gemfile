@@ -1,7 +1,8 @@
 source "http://rubygems.org"
 
-gem "aws-sdk"
+gem "aws-sdk", :require => "aws"
+gem "rake"
 
 group :development, :test do
-    gem "rspec"
+    gem "rspec", :require => "spec"
 end

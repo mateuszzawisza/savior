@@ -1,4 +1,3 @@
-require "aws"
 class Savior
   class Storage
     def initialize(options={})
