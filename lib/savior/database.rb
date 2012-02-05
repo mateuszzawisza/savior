@@ -2,13 +2,18 @@ class Savior
   class Database
     def initialize(options = {})
       default_options = {
-        :user => nil,
-        :password => nil,
-        :host => "localhost",
-        :port => "3306",
+        :user          => nil,
+        :password      => nil,
+        :host          => "localhost",
+        :port          => "3306",
         :database_name => nil,
       }
-      @credentials = default_options.merge(options)
+      options        = default_options.merge(options)
+      @user          = options[:user]
+      @password      = options[:password]
+      @host          = options[:host]
+      @port          = options[:port]
+      @database_name = options[:database_name]
     end
 
     def create_snapshot
@@ -27,17 +32,17 @@ class Savior
     private
       def mysql_command_line_options
         cli_options = []
-        cli_options << "-u #{@credentials[:user]}"
-        cli_options << "-h #{@credentials[:host]}"
-        cli_options << "-p#{@credentials[:password]}" if @credentials[:password]
-        cli_options << "-P #{@credentials[:port]}"
-        cli_options << "#{@credentials[:database_name]}"
+        cli_options << "-u #{@user}"
+        cli_options << "-h #{@host}"
+        cli_options << "-p#{@password}" if @password
+        cli_options << "-P #{@port}"
+        cli_options << "#{@database_name}"
         cli_options << "--single-transaction"
         cli_options.join(" ")
       end
 
       def set_db_snapshot_file_name
-        "#{@credentials[:database_name]}_" +
+        "#{@database_name}_" +
           "snapshot_#{Time.now.strftime("%Y%m%d%H%M%S")}.sql"
       end
     #EOF private

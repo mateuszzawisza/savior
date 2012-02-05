@@ -13,18 +13,13 @@ describe Savior::Database do
 
   describe "#initialize" do
 
-    let(:credentials) { subject.instance_variable_get("@credentials") }
-
-    it "sets database credentials" do
-      credentials.should_not be_nil
-    end
 
     it "sets user name" do
-      credentials[:user].should eq("testuser")
+      subject.instance_variable_get("@user").should eq("testuser")
     end
 
     it "sets password" do
-      credentials[:password].should eq("SuperSecret")
+      subject.instance_variable_get("@password").should eq("SuperSecret")
     end
 
     context "host is not given" do
@@ -33,7 +28,7 @@ describe Savior::Database do
       end
 
       it "sets host to default" do
-        credentials[:host].should eq("localhost")
+        subject.instance_variable_get("@host").should eq("localhost")
       end
     end
 
@@ -43,12 +38,12 @@ describe Savior::Database do
       end
 
       it "sets host" do
-        credentials[:host].should eq("db.example.com")
+        subject.instance_variable_get("@host").should eq("db.example.com")
       end
     end
 
     it "sets database name" do
-      credentials[:database_name].should eq("test_database")
+      subject.instance_variable_get("@database_name").should eq("test_database")
     end
 
     context "port is not set" do
@@ -57,7 +52,7 @@ describe Savior::Database do
       end
 
       it "sets database port to default" do
-        credentials[:port].should eq("3306")
+        subject.instance_variable_get("@port").should eq("3306")
       end
     end
 
@@ -67,21 +62,25 @@ describe Savior::Database do
       end
 
       it "sets database port to given value" do
-        credentials[:port].should eq("1234")
+        subject.instance_variable_get("@port").should eq("1234")
       end
     end
   end
 
   describe "#create_snapshot" do
-    let(:credentials) { subject.instance_variable_get("@credentials") }
+    let(:user) { subject.instance_variable_get("@user") }
+    let(:host) { subject.instance_variable_get("@host") }
+    let(:password) { subject.instance_variable_get("@password") }
+    let(:port) { subject.instance_variable_get("@port") }
+    let(:database_name) { subject.instance_variable_get("@database_name") }
 
     let :db_snapshot_file do
-      "#{credentials[:database_name]}_snapshot_#{Time.now.strftime("%Y%m%d%H%M%S")}.sql"
+      "#{database_name}_snapshot_#{Time.now.strftime("%Y%m%d%H%M%S")}.sql"
     end
 
     let :mysql_options do
-      "-u #{credentials[:user]} -h #{credentials[:host]} -p#{credentials[:password]} " +
-        "-P #{credentials[:port]} #{credentials[:database_name]} --single-transaction"
+      "-u #{user} -h #{host} -p#{password} " +
+        "-P #{port} #{database_name} --single-transaction"
     end
 
     let(:popen_mock) { double("popen") }
