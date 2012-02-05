@@ -1,3 +1,5 @@
+require "spec_helper"
+
 describe Savior do
   let(:db_options) do
     {
