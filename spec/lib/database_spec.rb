@@ -37,7 +37,7 @@ describe Savior::Database do
         Savior::Database.new(:host => "db.example.com")
       end
 
-      it "sets host" do
+      it "sets host to given value" do
         subject.instance_variable_get("@host").should eq("db.example.com")
       end
     end
