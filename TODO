@@ -1,0 +1,9 @@
+* remove old backups ( Time Capsue style ), keep last:
+  - 24 hourly snapshots
+  - 7 daily snapshots
+  - 4 weekly snapshots
+  - infinite monthly snapshots
+* remove temporary file from disk
+* improve binary file
+* improve CLI options parsing ( create separate class )
+* add improved tests for creating MySQL snapshot file
