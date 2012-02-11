@@ -62,11 +62,43 @@ describe Savior::Storage do
     before(:each) do
       s3.stub(:buckets).and_return(bucket_mock)
       File.stub(:read).and_return("test file")
+      File.stub(:delete).and_return(1)
     end
 
-    it "invokes aws::s3#write method" do
-      s3.should_receive(:buckets)
-      subject.upload_file(file)
+    context "with default options" do
+      it "invokes aws::s3#write method" do
+        s3.should_receive(:buckets)
+        subject.upload_file(file)
+      end
+
+      it "does not invoke File#delete method" do
+        File.should_not_receive(:delete)
+        subject.upload_file(file)
+      end
+    end
+
+    context "with remove_temp_file = true" do
+      it "invokes aws::s3#write method" do
+        s3.should_receive(:buckets)
+        subject.upload_file(file, true)
+      end
+
+      it "invokes File#delete method" do
+        File.should_receive(:delete)
+        subject.upload_file(file, true)
+      end
+    end
+
+    context "with remove_temp_file = false" do
+      it "invokes aws::s3#write method" do
+        s3.should_receive(:buckets)
+        subject.upload_file(file, false)
+      end
+
+      it "does not invoke File#delete method" do
+        File.should_not_receive(:delete)
+        subject.upload_file(file, false)
+      end
     end
   end
 end
