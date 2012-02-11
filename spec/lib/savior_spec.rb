@@ -12,8 +12,7 @@ describe Savior do
 
   let(:storage_options) do
     {
-      :backups_bucket => "production-snapshots",
-      :db_snapshot_file => "production-snapshot-123123123"
+      :backups_bucket => "production-snapshots"
     }
   end
 
@@ -55,12 +54,15 @@ describe Savior do
     end
 
     context "with configuration set" do
+      let(:db_snapshot_file_path) {"db_snapshot_file_path"}
       let(:database_mock) do
-        double("Database", { :create_snapshot => true, :cleanup_temporary_files => true })
+        double( "Database", { :create_snapshot => db_snapshot_file_path })
       end
+
       let(:storage_mock) do
         double("Storage", { :upload_file => true, :cleanup_old_snapshots => true })
       end
+
       before(:each) do
         Savior::Database.stub(:new).and_return(database_mock)
         Savior::Storage.stub(:new).and_return(storage_mock)
@@ -74,7 +76,7 @@ describe Savior do
       end
 
       it "invokes Savior::Storage#upload_file" do
-        storage_mock.should_receive(:upload_file)
+        storage_mock.should_receive(:upload_file).with(db_snapshot_file_path, true)
         subject.save
       end
     end
