@@ -3,14 +3,8 @@ require "aws"
 class Savior
   class Storage
     def initialize(options={})
-      default_options = {
-        :access_key_id     => ENV['AMAZON_ACCESS_KEY_ID'],
-        :secret_access_key => ENV['AMAZON_SECRET_ACCESS_KEY'],
-        :bucket_name       => nil
-      }
-      options = default_options.merge(options)
-      @access_key_id = options[:access_key_id]
-      @secret_access_key = options[:secret_access_key]
+      @access_key_id = options[:access_key_id] || ENV['AMAZON_ACCESS_KEY_ID']
+      @secret_access_key = options[:secret_access_key] || ENV['AMAZON_SECRET_ACCESS_KEY']
       @bucket_name = options[:bucket_name]
       @s3 = AWS::S3.new(
         :access_key_id     => @access_key_id,
